@@ -1,0 +1,174 @@
+// =============================================================================
+//	APP/DDE - DEVICE DESCRIPTOR
+// =============================================================================
+// See "main.p" for future information
+// =============================================================================
+
+#define Common_0_Main					(00)
+//
+// Simple rapidM2M "Hello World"
+// Prints "Hello World" to the development console once after starting the script.
+// */
+
+/* #define Common_1_Timer				(00)
+//
+// Extended rapidM2M "Hello World" Example
+// Prints "Hello World" every second to the development console.
+// */
+
+/* #define Common_2_Get_Module_Info		(00)
+//
+// Simple "Get Module Info" Example
+// Prints the information for identifying the rapidM2M hardware and the implemented API level to the development console.
+// */
+
+/* #define  Common_3_NamedArray			(00)
+//
+// Simple "Named Array" Example
+// A two-dimensional array is used to store several data records.
+// */
+
+/* #define Common_4_Pack				(00)
+//
+// Simple "Pack/Unpack" Example
+// First packs a float32 type variable into a byte array and then unpacks the data back into a float32 type variable.
+// After that, the float32 type variable is issued via the console.
+// */
+
+/* #define Common_5_Data_Types			(00)
+//
+// Simple "Data Types" Example
+// Example on how to implement, handle and convert integer, floating-point and boolean variables in rapidM2M projects.
+// */
+
+/* #define Common_6_Array				(00)
+//
+// Simple "Array" Example
+// Declarations and handling of arrays and the sizeof operator
+// */
+
+/* #define Common_7_Conditional			(00)
+//
+// Simple rapidM2M "Conditional" Example
+// Example on how to use if and switch statements in rapidM2M projects
+// */
+
+/* #define Common_8_Loop				(00)
+//
+// Simple rapidM2M "Loop" Example
+// Example on how to use loops in rapidM2M projects
+// */
+
+/* #define Switch						(10)
+//
+// Simple "Button" Example
+// Evaluates the state of a button connected to the "INT0" pin.
+// If the button was pressed ("low" signal level) "[KEY] Key pressed" is issued via the console.
+// If the button was released ("high" signal level) "[KEY] Key released" is issued via the console.
+// */
+
+
+
+
+/* #define System_Values_0				(30)
+//
+// Simple "System Values" Example
+// Reads the last valid values for Vin and Vaux from the system and issues them every second via the console
+// */
+
+/* #define System_Values_1				(30)
+//
+// Extended "System Values" Example
+// Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
+// data record in the flash of the system. The measurement data generated this way is then transmitted periodically
+// (transmission interval) to the server.
+
+#histdata0 measurements up
+Vin		u32 	title=Vin 		units=mV 	// Input voltage Vin
+Vaux 	u32		title=Vaux		units=mV 	// Auxiliary voltage Vaux
+// */
+
+/* #define System_Values_2a				(30)
+//
+// Extended "System Values" Example
+// Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
+// data record in the flash of the system. The measurement data generated this way is then transmitted periodically
+// (transmission interval) to the server. The interval for recording and transmitting measurement data can be configured
+// via the server.
+// Note: This example uses poor practice: When downward configs are not available on the device they are simply replaced
+//       with some defaults (for easy demonstration).
+
+#histdata0 measurements up
+Vin		u32 	title=Vin 		units=mV 	// Input voltage Vin
+Vaux 	u32		title=Vaux		units=mV 	// Auxiliary voltage Vaux
+
+#config0 Settings down	title=Settings
+// Record interval
+RecInterval		u32		title="Record Interval"			units=min	vscale=0.01666666667 	min=1		default=1
+// Transmission interval
+TxInterval		u32		title="Transmission Interval"	units=min	vscale=0.01666666667 	min=10		default=60
+// */
+
+/* #define System_Values_2b				(30)
+//
+// Extended "System Values" Example
+// Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
+// data record in the flash of the system. The measurement data generated this way is then transmitted periodically
+// (transmission interval) to the server. The interval for recording and transmitting measurement data can be configured
+// via the server.
+// Note: In contrast to example "30_System_Values_2a" this example uses the "uplink" library. Example "30_System_Values_2a"
+//       is extended with a mechanism which grants the downward configs to be valid before the device starts its regular
+//       operation.
+
+#histdata0 measurements up
+Vin		u32 	title=Vin 		units=mV 	// Input voltage Vin
+Vaux 	u32		title=Vaux		units=mV 	// Auxiliary voltage Vaux
+
+#config0 Settings down	title=Settings
+// Record interval
+RecInterval		u32		title="Record Interval"			units=min	vscale=0.01666666667 	min=1		default=1
+// Transmission interval
+TxInterval		u32		title="Transmission Interval"	units=min	vscale=0.01666666667 	min=10		default=60
+// */
+
+/* #define System_Values_3				(30)
+//
+// Extended "System Values" Example
+// Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
+// data record in the flash of the system. The measurement data generated this way is then transmitted periodically
+// (transmission interval) to the server. The interval for recording and transmitting measurement data as well as the
+// transmission mode (interval, wakeup or online) can be configured via the server.
+
+#histdata0 measurements up
+Vin		u32 	title=Vin 		units=mV 	// Input voltage Vin
+Vaux 	u32		title=Vaux		units=mV 	// Auxiliary voltage Vaux
+
+#config0 Settings down	title=Settings
+// Record interval
+RecInterval		u32		title="Record Interval"			units=min	vscale=0.01666666667 	min=1		default=1
+// Transmission interval
+TxInterval		u32		title="Transmission Interval"	units=min	vscale=0.01666666667 	min=10		default=60
+// Transmission Mode
+TxMode			u8		title="Transmission Mode"		editmask=0=Interval;1=Wakeup;2=Online			default=1
+// */
+
+
+
+
+
+
+
+
+/* #define GNSS_NMEA_system				(80)
+//
+// Simple "GNSS NMEA" Example
+// Example on how to decode GNSS NMEA frames with sentence identifier "GGA" by using
+// rM2M system integrated functions. Each time a NMEA data frame is received from the GNSS module (approximately every second)
+// the frame is decoded and issued via the console. Periodically (record interval) the last valid values for longitude
+// and latitude are stored in the flash of the system. The measurement data generated this way is then
+// transmitted periodically (transmission interval) to the server.
+
+#histdata0 measurements up
+Lon		s32		title=Longitude		units=°		vscale=0.000001		decpl=6
+Lat		s32		title=Latitude		units=°		vscale=0.000001		decpl=6
+// */
