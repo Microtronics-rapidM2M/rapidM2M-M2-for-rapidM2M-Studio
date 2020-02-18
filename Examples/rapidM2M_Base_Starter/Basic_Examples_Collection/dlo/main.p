@@ -66,8 +66,13 @@
 #endif
 
 //Simple "Button" Example
-#ifdef Switch
+#ifdef Switch_0
 	#include "10_Switch/Step_0"
+#endif
+
+//Extended "Button" Example
+#ifdef Switch_1
+	#include "10_Switch/Step_1"
 #endif
 
 
@@ -105,7 +110,15 @@
 #endif
 
 
+//Simple "Alarm" Example
+#ifdef Alarm_0
+	#include "61_Alarm/Step_0"
+#endif
 
+//Extended "Alarm" Example
+#ifdef Alarm_1
+	#include "61_Alarm/Step_1"
+#endif
 
 
 
@@ -119,10 +132,7 @@
 #endif
 
 #ifndef UPLINK_LIB_USED
-	/* The four following functions are not used for this example. However, they must be defined because the
+	/* The following function is not used for this example. However, it must be defined because the
 	   "~uplink" library required for some other examples is included in the Basic Example Project.          */
-	public onUplinkRestore( cfgId) {}
-	public onUplinkApply( cfgId) { return ERROR;}
-	public onUplinkWaiting() {}
-	public onUplinkReady() { return 0; }
+	public onUplinkEvent( ev, param) {}
 #endif

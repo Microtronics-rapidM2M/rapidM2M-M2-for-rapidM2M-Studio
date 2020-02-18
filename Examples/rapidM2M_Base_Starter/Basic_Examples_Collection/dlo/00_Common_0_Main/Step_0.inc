@@ -7,10 +7,10 @@
  * |_|  \__,_| .__/|_|\__,_||_|  |_|____|_|  |_|
  *           | |
  *           |_|
- * 
+ *
  * Simple rapidM2M "Hello World"
  * Prints "Hello World" to the development console once after starting the script.
- * 
+ *
  * Compatible with every rapidM2M hardware.
  *
  * @version 20190816

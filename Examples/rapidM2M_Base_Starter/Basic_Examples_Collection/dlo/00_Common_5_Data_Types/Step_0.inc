@@ -7,15 +7,15 @@
  * |_|  \__,_| .__/|_|\__,_||_|  |_|____|_|  |_|
  *           | |
  *           |_|
- * 
+ *
  * Simple "Data Types" Example
- * 
+ *
  * Example on how to implement, handle and convert integer, floating-point and boolean variables in
  * rapidM2M projects.
- * 
+ *
  * Compatible with every rapidM2M hardware
  *
- * @version 20190816
+ * @version 20200218
  */
 
 /* Application entry point */
@@ -24,7 +24,13 @@ main()
   new iInt;                                 // Integer variable
   new bool:bBool;                           // Boolean variable
   new Float:fFloat;                         // Floating-Point variable
-  
+
+  // Static byte array that should be used as a buffer to output debug information via the console or watch panel
+  static aConsole_Buffer[2048];
+
+  // Provides the firmware with a buffer from the RAM area reserved for the device logic that is used to output debug information via the console or watch panel
+  setbuf( aConsole_Buffer, 4 * sizeof (aConsole_Buffer));
+
   /* Prints default values to the console */
   #log("Integer default value: %d", iInt);
   #log("Floating-Point default value: %f", fFloat);

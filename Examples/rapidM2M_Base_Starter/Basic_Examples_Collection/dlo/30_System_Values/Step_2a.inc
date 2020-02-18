@@ -25,10 +25,8 @@
  * Only compatible with rapidM2M M2xx
  *
  *
- * @version 20190508
+ * @version 20200218
  */
-
-#define DDE_Settings_idx	0//todo ersetzen durch automatisch generiertes define
 
 const
 {
@@ -42,28 +40,31 @@ static aSettings[DDE_Settings]
 /* Global variables for the remaining time until certain actions are triggered */
 static iTxTimer;                            // Sec. until the next transmission
 
+/* Static byte array that should be used as a buffer to output debug information via the console or watch panel */
+static aConsole_Buffer[2048];
+
  /* 1s Timer used to read the last valid values for Vin and Vaux from the system and issue them via the console   */
 #callback Timer1s()
 {
-	static iLastRecord;						// Timestamp used for the last record
+	static iLastRecord;                       // Timestamp used for the last record
 
 	// If the measurement interval has expired (i.e. a record should be generated)
 	if ( momentElapsed(iLastRecord, aSettings.RecInterval) )
 	{
 		#log("Create Record");
-		RecordData(iLastRecord);			// Calls up the function to record the data
+		RecordData(iLastRecord);                // Calls up the function to record the data
 	}
 
-	iTxTimer--;                             // Counter counting down the sec. to the next transmission
-	  if(iTxTimer <= 0)                       // When the counter has expired ->
-	  {
+	iTxTimer--;                               // Counter counting down the sec. to the next transmission
+	if(iTxTimer <= 0)                         // When the counter has expired ->
+	{
 		#log("Start Transmission");
-		catch( rM2M_TxStart());				// Initiates a connection to the server
-		iTxTimer = aSettings.TxInterval;	// Resets counter var. to current transmission interval [sec.]
-	  }
+		catch( rM2M_TxStart());                 // Initiates a connection to the server
+		iTxTimer = aSettings.TxInterval;        // Resets counter var. to current transmission interval [sec.]
+	}
 
-	// Issues the seconds until the next transmission to the console
-	#log("iTxTimer=%d", iTxTimer);
+	// Issues the seconds until the next transmission to the watch panel
+	#watch("iTxTimer=%d", iTxTimer);
 }
 
 /**
@@ -75,21 +76,24 @@ static iTxTimer;                            // Sec. until the next transmission
 #callback ReadConfig(cfgIdx)
 {
 	// If the changed configuration is the "Settings" config -> Calls up the function to apply the "Settings" config
-	if (cfgIdx==DDE_Settings_idx) ApplySettings();
+	if (cfgIdx==DDE_Settings_idx) onUplinkApply_Settings();
 }
 
 /* Application entry point */
 main()
 {
-	setInterval(Timer1s,1000);              // Initialisation of a 1 sec. timer used for the general program sequence
-	watchUplinkConfigs(ReadConfig);         // Specification of the function that should be called up when a config block is changed
-	ApplySettings();						// Inits configuration
+	// Provides the firmware with a buffer from the RAM area reserved for the device logic that is used to output debug information via the console or watch panel
+	setbuf( aConsole_Buffer, 4 * sizeof (aConsole_Buffer));
 
-	iTxTimer  = aSettings.TxInterval;       // Sets counter variable to current transmission interval
+	setInterval(Timer1s,1000);                // Initialisation of a 1 sec. timer used for the general program sequence
+	watchUplinkConfigs(ReadConfig);           // Specification of the function that should be called up when a config block is changed
+	onUplinkApply_Settings();                 // Inits configuration
+
+	iTxTimer  = aSettings.TxInterval;         // Sets counter variable to current transmission interval
 
 	//Starts initial connection
-	  catch(rM2M_TxSetMode(RM2M_TXMODE_WAKEUP));// Sets the connection type to "Wakeup" mode
-	catch(rM2M_TxStart());					// Initiates a connection to the server
+	catch(rM2M_TxSetMode(RM2M_TXMODE_WAKEUP));// Sets the connection type to "Wakeup" mode
+	catch(rM2M_TxStart());                    // Initiates a connection to the server
 
 }
 /**
@@ -100,14 +104,14 @@ main()
  */
 RecordData(iTimestamp)
 {
-	new aSysValues[TMx_SysValue];			// Temporary memory for the internal measurement values
-	new aRecData[DDE_measurements];			// Temporary memory for the data record to be saved
+	new aSysValues[TMx_SysValue];       // Temporary memory for the internal measurement values
+	new aRecData[DDE_measurements];     // Temporary memory for the data record to be saved
 
-	Mx_GetSysValues(aSysValues);			// Reads the last valid values for Vin and Vaux from the system
-											// The interval for determining these values is 1sec. and cannot be changed.
+	Mx_GetSysValues(aSysValues);        // Reads the last valid values for Vin and Vaux from the system
+	                                    // The interval for determining these values is 1sec. and cannot be changed.
 
-	aRecData.Vin  = aSysValues.VIn;			// Copies the last valid values for Vin into the temporary memory for the data record to be saved
-	aRecData.Vaux = aSysValues.VAux;		// Copies the last valid values for Vaux into the temporary memory for the data record to be saved
+	aRecData.Vin  = aSysValues.VIn;     // Copies the last valid values for Vin into the temporary memory for the data record to be saved
+	aRecData.Vaux = aSysValues.VAux;    // Copies the last valid values for Vaux into the temporary memory for the data record to be saved
 
 	DDE_measurements_write(iTimestamp, aRecData);// Transfers data record to the system to be recorded
 
@@ -115,14 +119,14 @@ RecordData(iTimestamp)
 
 /* Function used to apply a changed "Settings" configuration received from the server
    If the configuration cannot be read from the system, the global variables are initialised with default values. */
-ApplySettings()
+onUplinkApply_Settings()
 {
-	new iResult;							// Temporary memory for the return value of a function
-	new aReadSettings[DDE_Settings] 		// Temporary memory for the read configuration
+	new iResult;                        // Temporary memory for the return value of a function
+	new aReadSettings[DDE_Settings]     // Temporary memory for the read configuration
 
 	iResult= DDE_Settings_read(aReadSettings);// Reads config from the system and copies it to the temporary memory.
 
-	if(iResult< OK)							// If the config is invalid or not available
+	if(iResult< OK)                     // If the config is invalid or not available
 	{
 		// Initialises the configuration with default values
 		aReadSettings.RecInterval = INTERVAL_RECORD;
@@ -136,9 +140,11 @@ ApplySettings()
 	// If the received transmission interval does not correspond to that of the global variable ->
 	if(aSettings.TxInterval != aReadSettings.TxInterval)
 	{
-		#log("TxInterval changed to %d s", aReadSettings.TxInterval);	// Issues received value via the console
-		iTxTimer = aReadSettings.TxInterval;							// Sets counter var. to the new transmission interval immediately
+		#log("TxInterval changed to %d s", aReadSettings.TxInterval); // Issues received value via the console
+		iTxTimer = aReadSettings.TxInterval; // Sets counter var. to the new transmission interval immediately
 	}
 
-	aSettings = aReadSettings;				// Copies received values into the global variable
+	aSettings = aReadSettings;          // Copies received values into the global variable
+	
+	return OK;
 }

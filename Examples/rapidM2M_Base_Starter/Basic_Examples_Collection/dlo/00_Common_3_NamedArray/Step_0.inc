@@ -20,7 +20,7 @@
  *
  * Compatible with every rapidM2M hardware
  *
- * @version 20190816
+ * @version 20200218
  */
 
 /**
@@ -46,8 +46,14 @@ static aDataStorage[DATA_NUM][TData];
 /* application entry point */
 main()
 {
+  // Static byte array that should be used as a buffer to output debug information via the console or watch panel
+  static aConsole_Buffer[2048];
+  
   // Temporary array to store a single data record. A list of symbols (TData[.Tag{10}, .Count, .Avg]) is used to specify the number of array elements.
-  new aItem[TData]
+  new aItem[TData];
+  
+  // Provides the firmware with a buffer from the RAM area reserved for the device logic that is used to output debug information via the console or watch panel
+  setbuf( aConsole_Buffer, 4 * sizeof (aConsole_Buffer));
 
   // Copies the desired data into the temporary array for storing a single data record.
   aItem.Tag   = "5500011";                  // Copies the string including the terminating zero

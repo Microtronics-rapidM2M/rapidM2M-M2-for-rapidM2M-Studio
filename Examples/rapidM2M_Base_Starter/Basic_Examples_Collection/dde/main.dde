@@ -4,62 +4,62 @@
 // See "main.p" for future information
 // =============================================================================
 
-#define Common_0_Main					(00)
+ #define Common_0_Main              (00)
 //
 // Simple rapidM2M "Hello World"
 // Prints "Hello World" to the development console once after starting the script.
 // */
 
-/* #define Common_1_Timer				(00)
+/* #define Common_1_Timer             (00)
 //
 // Extended rapidM2M "Hello World" Example
 // Prints "Hello World" every second to the development console.
 // */
 
-/* #define Common_2_Get_Module_Info		(00)
+/* #define Common_2_Get_Module_Info   (00)
 //
 // Simple "Get Module Info" Example
 // Prints the information for identifying the rapidM2M hardware and the implemented API level to the development console.
 // */
 
-/* #define  Common_3_NamedArray			(00)
+/* #define  Common_3_NamedArray       (00)
 //
 // Simple "Named Array" Example
 // A two-dimensional array is used to store several data records.
 // */
 
-/* #define Common_4_Pack				(00)
+/* #define Common_4_Pack              (00)
 //
 // Simple "Pack/Unpack" Example
 // First packs a float32 type variable into a byte array and then unpacks the data back into a float32 type variable.
 // After that, the float32 type variable is issued via the console.
 // */
 
-/* #define Common_5_Data_Types			(00)
+/* #define Common_5_Data_Types        (00)
 //
 // Simple "Data Types" Example
 // Example on how to implement, handle and convert integer, floating-point and boolean variables in rapidM2M projects.
 // */
 
-/* #define Common_6_Array				(00)
+/* #define Common_6_Array             (00)
 //
 // Simple "Array" Example
 // Declarations and handling of arrays and the sizeof operator
 // */
 
-/* #define Common_7_Conditional			(00)
+/* #define Common_7_Conditional       (00)
 //
 // Simple rapidM2M "Conditional" Example
 // Example on how to use if and switch statements in rapidM2M projects
 // */
 
-/* #define Common_8_Loop				(00)
+/* #define Common_8_Loop              (00)
 //
 // Simple rapidM2M "Loop" Example
 // Example on how to use loops in rapidM2M projects
 // */
 
-/* #define Switch						(10)
+/* #define Switch_0                   (10)
 //
 // Simple "Button" Example
 // Evaluates the state of a button connected to the "INT0" pin.
@@ -67,16 +67,26 @@
 // If the button was released ("high" signal level) "[KEY] Key released" is issued via the console.
 // */
 
+/* #define Switch_1                   (10)
+//
+// Extended "Button" Example
+// Evaluates the state of a button connected to the "INT0" pin and also detects if the button was pressed only briefly
+// or for a longer time
+// If the button was pressed ("low" signal level) "[KEY] Key pressed" is issued via the console.
+// If the button was pressed and held for a longer time "[KEY] Long Push Detected" is issued via the console.
+// If the button was released after it had been pressed and held for a longer time "[KEY] Long key detected
+// and key released" is issued via the console.
+// If the button was released after it had been pressed briefly ("high" signal level) "[KEY] Key released"
+// is issued via the console.
+// */
 
-
-
-/* #define System_Values_0				(30)
+/* #define System_Values_0            (30)
 //
 // Simple "System Values" Example
 // Reads the last valid values for Vin and Vaux from the system and issues them every second via the console
 // */
 
-/* #define System_Values_1				(30)
+/* #define System_Values_1            (30)
 //
 // Extended "System Values" Example
 // Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
@@ -88,7 +98,7 @@ Vin		u32 	title=Vin 		units=mV 	// Input voltage Vin
 Vaux 	u32		title=Vaux		units=mV 	// Auxiliary voltage Vaux
 // */
 
-/* #define System_Values_2a				(30)
+/* #define System_Values_2a           (30)
 //
 // Extended "System Values" Example
 // Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
@@ -109,7 +119,7 @@ RecInterval		u32		title="Record Interval"			units=min	vscale=0.01666666667 	min=
 TxInterval		u32		title="Transmission Interval"	units=min	vscale=0.01666666667 	min=10		default=60
 // */
 
-/* #define System_Values_2b				(30)
+/* #define System_Values_2b           (30)
 //
 // Extended "System Values" Example
 // Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
@@ -131,7 +141,7 @@ RecInterval		u32		title="Record Interval"			units=min	vscale=0.01666666667 	min=
 TxInterval		u32		title="Transmission Interval"	units=min	vscale=0.01666666667 	min=10		default=60
 // */
 
-/* #define System_Values_3				(30)
+/* #define System_Values_3            (30)
 //
 // Extended "System Values" Example
 // Reads the last valid values for Vin and Vaux periodically (record interval) from the system and stores the generated
@@ -155,11 +165,41 @@ TxMode			u8		title="Transmission Mode"		editmask=0=Interval;1=Wakeup;2=Online			
 
 
 
+/* #define Alarm_0                    (61)
+//
+// Simple "Alarm" Example
+// Simulates and records (record interval) a temperature value that changes between 19°C and 31°C in 1°C steps. The
+// measurement data generated this way is then transmitted periodically (transmission interval) to the server. If the
+// temperature exceeds 25°C, an alarm is triggered. Once an alarm has been triggered and the temperature falls below
+// 25°C again, the alarm is released. In both cases (when triggering or releasing the alarm) an alarm record is
+// generated and transmitted to the server immediately.
+
+#histdata0 measurements up
+Temperature		f32		title="Temperature"		units="°C"	// Temperature
+
+#alerts
+// */
+
+/* #define Alarm_1                    (61)
+//
+// Extended "Alarm" Example
+// Simulates and records (record interval) a temperature value that changes between 19°C and 31°C in 1°C steps. The
+// measurement data generated this way is then transmitted periodically (transmission interval) to the server. If the
+// temperature is greater than or equal to 25°C, an alarm is triggered. Once an alarm has been triggered and the
+// temperature falls to or below 25°C - 5% (i.e. 23,75°C) again, the alarm is released. In both cases (when triggering
+// or releasing the alarm) an alarm record is generated and transmitted to the server immediately.
+
+#histdata0 measurements up
+Temperature		f32		title="Temperature"		units="°C"	// Temperature
+
+#alerts
+// */
 
 
 
 
-/* #define GNSS_NMEA_system				(80)
+
+/* #define GNSS_NMEA_system           (80)
 //
 // Simple "GNSS NMEA" Example
 // Example on how to decode GNSS NMEA frames with sentence identifier "GGA" by using

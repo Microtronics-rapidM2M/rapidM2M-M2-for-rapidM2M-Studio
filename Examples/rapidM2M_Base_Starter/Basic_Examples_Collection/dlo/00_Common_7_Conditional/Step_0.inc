@@ -7,11 +7,11 @@
  * |_|  \__,_| .__/|_|\__,_||_|  |_|____|_|  |_|
  *           | |
  *           |_|
- * 
+ *
  * Simple rapidM2M "Conditional" Example
- * 
+ *
  * Example on how to use if and switch statements in rapidM2M projects
- * 
+ *
  * Compatible with every rapidM2M hardware
  *
  * @version 20190816

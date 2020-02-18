@@ -7,14 +7,14 @@
  * |_|  \__,_| .__/|_|\__,_||_|  |_|____|_|  |_|
  *           | |
  *           |_|
- * 
  *
- * Prints the information for identifying the rapidM2M hardware and the implemented API level to the 
+ *
+ * Prints the information for identifying the rapidM2M hardware and the implemented API level to the
  * development console.
- * 
+ *
  * Compatible with every rapidM2M hardware.
  *
- * @version 20190816  
+ * @version 20190816
  */
 
 /* Application entry point */
@@ -30,7 +30,7 @@ main()
   // Prints the serial number of the device to the console
   #log("SN:%02X%02X%02X%02X%02X%02X%02X%02X", aId.sn{0}, aId.sn{1}, aId.sn{2}, aId.sn{3}, aId.sn{4}, aId.sn{5}, aId.sn{6}, aId.sn{7});
   
-  // Prints the "Firmware major version", "Firmware minor version" and the "Site title (context)" to the console 
+  // Prints the "Firmware major version", "Firmware minor version" and the "Site title (context)" to the console
   #log("FW:%d.%d Context:'%s'", aId.fwmajor, aId.fwminor, aId.ctx);
   
   // Retrieves the implemented API level of the script engine and prints it to the console
