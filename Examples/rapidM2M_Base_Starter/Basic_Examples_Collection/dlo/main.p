@@ -75,6 +75,15 @@
 	#include "10_Switch/Step_1"
 #endif
 
+//Simple "LED" Example
+#ifdef Led_0
+	#include "11_Led/Step_0"
+#endif
+
+//Extended "LED" Example
+#ifdef Led_1
+	#include "11_Led/Step_1"
+#endif
 
 
 
