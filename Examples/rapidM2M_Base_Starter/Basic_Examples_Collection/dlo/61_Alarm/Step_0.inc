@@ -18,7 +18,7 @@
  *
  * Compatible with every rapidM2M hardware
  *
- * @version 20200213
+ * @version 20200219
  */
  
 const
@@ -116,7 +116,7 @@ CheckAlarm()
 	{
     // Sets alarm and starts transmission
 		#log("set Alarm");
-		DDE_alerts_underflow(true,DDE_measurements_id, 0, fTemperature, fAlarmThreshold);// Sets alarm
+		DDE_alerts_overflow(true,DDE_measurements_id, 0, fTemperature, fAlarmThreshold);// Sets alarm
 		catch(rM2M_TxStart());                    // Initiates a connection to the server
 		iIsAlarmActive = 1;                       // Sets current alarm state to "alarm active"
 	}
